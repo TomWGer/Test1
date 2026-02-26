@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fahrtenbuch</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Fahrtenbuch</h1>
+      <p class="intro">Wähle ein Fahrzeugmodell und berechne Verbrauch sowie Kosten pro Kilometer.</p>
+
+      <section class="card">
+        <h2>Tagesaktuelle Kraftstoffpreise</h2>
+        <p id="fuelStatus" class="hint">Preise werden geladen …</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fahrzeugmodell</th>
+                <th>Kraftstoff</th>
+                <th>Tagespreis</th>
+              </tr>
+            </thead>
+            <tbody id="fuelTableBody"></tbody>
+          </table>
+        </div>
+        <button id="refreshPrices" type="button" class="ghost">Preise aktualisieren</button>
+      </section>
+
+      <section class="card">
+        <h2>Fahrt erfassen</h2>
+        <form id="trip-form">
+          <label>
+            Fahrzeugmodell
+            <select id="vehicle" required>
+              <option value="" disabled selected>Bitte auswählen</option>
+            </select>
+          </label>
+
+          <label>
+            Strecke (km)
+            <input id="distance" type="number" min="0.1" step="0.1" required />
+          </label>
+
+          <label>
+            Datum
+            <input id="tripDate" type="date" required />
+          </label>
+
+          <button type="submit">Fahrt berechnen & speichern</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Berechnung</h2>
+        <div id="calculation" class="result">Noch keine Berechnung vorhanden.</div>
+      </section>
+
+      <section class="card">
+        <div class="history-head">
+          <h2>Fahrtenhistorie</h2>
+          <button id="clearHistory" class="ghost" type="button">Historie löschen</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Modell</th>
+                <th>Kraftstoffpreis</th>
+                <th>Strecke</th>
+                <th>Verbrauch</th>
+                <th>Kosten</th>
+                <th>€/km</th>
+              </tr>
+            </thead>
+            <tbody id="tripTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
