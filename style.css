@@ -32,6 +32,12 @@ h1 {
   box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
 }
 
+
+.hint {
+  margin-top: 0;
+  color: #374151;
+}
+
 form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -103,4 +109,9 @@ td {
   padding: 0.55rem;
   border-bottom: 1px solid #e5e7eb;
   text-align: left;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }

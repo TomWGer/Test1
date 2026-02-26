@@ -12,6 +12,24 @@
       <p class="intro">Wähle ein Fahrzeugmodell und berechne Verbrauch sowie Kosten pro Kilometer.</p>
 
       <section class="card">
+        <h2>Tagesaktuelle Kraftstoffpreise</h2>
+        <p id="fuelStatus" class="hint">Preise werden geladen …</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fahrzeugmodell</th>
+                <th>Kraftstoff</th>
+                <th>Tagespreis</th>
+              </tr>
+            </thead>
+            <tbody id="fuelTableBody"></tbody>
+          </table>
+        </div>
+        <button id="refreshPrices" type="button" class="ghost">Preise aktualisieren</button>
+      </section>
+
+      <section class="card">
         <h2>Fahrt erfassen</h2>
         <form id="trip-form">
           <label>
@@ -24,11 +42,6 @@
           <label>
             Strecke (km)
             <input id="distance" type="number" min="0.1" step="0.1" required />
-          </label>
-
-          <label>
-            Spritpreis (€/L)
-            <input id="fuelPrice" type="number" min="0.01" step="0.01" required />
           </label>
 
           <label>
@@ -56,6 +69,7 @@
               <tr>
                 <th>Datum</th>
                 <th>Modell</th>
+                <th>Kraftstoffpreis</th>
                 <th>Strecke</th>
                 <th>Verbrauch</th>
                 <th>Kosten</th>

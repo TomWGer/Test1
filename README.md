@@ -4,7 +4,9 @@ Einfache Web-App, um Fahrten mit Fahrzeugmodell, Verbrauch und Kosten pro Kilome
 
 ## Funktionen
 
-- Fahrzeugmodell aus vordefinierter Liste auswählen (mit Verbrauch in L/100 km)
+- Fahrzeugmodell aus vordefinierter Liste auswählen (inkl. Kraftstofftyp)
+- Tagesaktuelle Kraftstoffpreise automatisch laden (Quelle: fueleconomy.gov API)
+- Kostenkalkulation je Fahrt mit dem geladenen Tagespreis des passenden Kraftstoffs
 - Spritverbrauch pro Fahrt berechnen
 - Gesamtkosten und Kosten pro Kilometer ausrechnen
 - Fahrten lokal im Browser speichern (LocalStorage)
