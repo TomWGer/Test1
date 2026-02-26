@@ -29,6 +29,15 @@ const currency = new Intl.NumberFormat("de-DE", {
 
 let activeFuelPrices = { ...fallbackFuelPrices };
 
+function parseFuelPrice(value, fallback) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function getFuelPriceForType(fuelType) {
+  return parseFuelPrice(activeFuelPrices[fuelType], fallbackFuelPrices[fuelType]);
+}
+
 function fillVehicles() {
   vehicleCatalog.forEach((vehicle, idx) => {
     const option = document.createElement("option");
@@ -40,9 +49,9 @@ function fillVehicles() {
 
 function mapApiToFuelTypes(apiValues) {
   return {
-    E5: Number(apiValues.premium || fallbackFuelPrices.E5),
-    E10: Number(apiValues.regular || fallbackFuelPrices.E10),
-    Diesel: Number(apiValues.diesel || fallbackFuelPrices.Diesel),
+    E5: parseFuelPrice(apiValues.premium, fallbackFuelPrices.E5),
+    E10: parseFuelPrice(apiValues.regular, fallbackFuelPrices.E10),
+    Diesel: parseFuelPrice(apiValues.diesel, fallbackFuelPrices.Diesel),
   };
 }
 
@@ -54,7 +63,7 @@ async function fetchDailyFuelPrices() {
 
   const xmlText = await response.text();
   const xml = new DOMParser().parseFromString(xmlText, "text/xml");
-  const valueOf = (tagName) => xml.querySelector(tagName)?.textContent;
+  const valueOf = (tagName) => xml.querySelector(tagName)?.textContent?.trim();
 
   return mapApiToFuelTypes({
     regular: valueOf("regular"),
@@ -68,7 +77,7 @@ function renderFuelTable() {
 
   vehicleCatalog.forEach((vehicle) => {
     const tr = document.createElement("tr");
-    const modelFuelPrice = activeFuelPrices[vehicle.fuelType];
+    const modelFuelPrice = getFuelPriceForType(vehicle.fuelType);
     tr.innerHTML = `
       <td>${vehicle.name}</td>
       <td>${vehicle.fuelType}</td>
@@ -85,7 +94,7 @@ async function loadFuelPrices() {
   try {
     activeFuelPrices = await fetchDailyFuelPrices();
     fuelStatus.textContent =
-      "Tagesaktuelle Preise erfolgreich geladen (Quelle: fueleconomy.gov, heute).";
+      "Tagesaktuelle Preise erfolgreich geladen (Quelle: fueleconomy.gov).";
   } catch (error) {
     activeFuelPrices = { ...fallbackFuelPrices };
     fuelStatus.textContent =
@@ -133,7 +142,7 @@ function renderTrips() {
 
 function calculateTrip({ modelIndex, distanceKm }) {
   const vehicle = vehicleCatalog[modelIndex];
-  const fuelPricePerLiter = activeFuelPrices[vehicle.fuelType];
+  const fuelPricePerLiter = getFuelPriceForType(vehicle.fuelType);
   const litersUsed = (distanceKm / 100) * vehicle.consumption;
   const totalCost = litersUsed * fuelPricePerLiter;
   const costPerKm = totalCost / distanceKm;
@@ -159,6 +168,11 @@ form.addEventListener("submit", (event) => {
   const modelIndex = Number(vehicleSelect.value);
   const distanceKm = Number(document.querySelector("#distance").value);
   const date = document.querySelector("#tripDate").value;
+
+  if (!Number.isFinite(modelIndex) || !Number.isFinite(distanceKm) || distanceKm <= 0) {
+    calculationBox.textContent = "Bitte gültiges Modell und eine Strecke > 0 km eingeben.";
+    return;
+  }
 
   const result = calculateTrip({ modelIndex, distanceKm });
 
