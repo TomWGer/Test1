@@ -1,0 +1,7 @@
+services:
+  krav-planner:
+    build: .
+    container_name: krav-planner
+    restart: unless-stopped
+    ports:
+      - "8088:80"
